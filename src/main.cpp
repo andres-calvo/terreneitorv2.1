@@ -1,9 +1,13 @@
 #include <Arduino.h>
 #include <ESP32Servo.h>
+#include <HCSR04.h>
 
 int servoPin = 14;
+int trigPin = 32;
+int echoPin = 33;
 
 Servo servo;
+UltraSonicDistanceSensor distanceSensor(trigPin, echoPin);
 
 unsigned long previousMillisServo = 0; // Almacena el último tiempo registrado
 const unsigned long intervalServo = 100;
@@ -54,7 +58,10 @@ void updateServoPos()
       incremento = 15; // Cambiar la dirección del movimiento
     }
     Serial.print("Servo position: ");
-    Serial.println(servoPos);
+    Serial.print(servoPos);
+    Serial.print(" Distance (cm): ");
+    Serial.println(distanceSensor.measureDistanceCm());
+
     servo.write(servoPos);
   }
 }
